@@ -1,1 +1,1 @@
-Visit the application here: [index.html](index.html)
+Visit the application here: https://twistedmock.github.io/mockingbird/
