@@ -29,21 +29,21 @@ button:active {
 	background-color: #18aa18;
 }
 
-.up-right {
+/* .up-right {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
 	position: fixed;
 	top: 10px;
 	right: 10px;
-}
+} */
 
 .up-right img {
 	width: 32px;
 	height: 32px;
 }
 
-.bottom-left {
+/* .bottom-left {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -57,7 +57,7 @@ button:active {
 	margin-bottom: 1%;
 	margin-left: 1%;
 	border-radius: 10%;
-}
+} */
 
 .hide {
 	display: none;
@@ -69,23 +69,23 @@ button:active {
 	align-items: center;
 }
 
-.top-logo {
+/* .top-logo {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	margin-bottom: 10px;
 	text-decoration: none;
-}
+} */
 
-.top-logo img {
+/* .top-logo img {
 	width: 168px;
-}
+} */
 
-.top-logo div {
+/* .top-logo div {
 	text-align: center;
 	font-weight: 600;
 	color: #e6e7e8;
-}
+} */
 
 input {
 	height: 30px;
@@ -103,32 +103,219 @@ input {
 	font-size: 16px;
 }
 
+.hash-status {
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 8px 16px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.hash-status.connecting {
+	background-color: #f39c12;
+	color: #2c3e50;
+}
+
+.hash-status.connected {
+	background-color: #27ae60;
+	color: #2c3e50;
+}
+
+.hash-status.error {
+	background-color: #e74c3c;
+	color: #ffffff;
+}
+
+.amount-controls {
+	margin: 15px 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.amount-controls label {
+	font-weight: 600;
+	color: #e6e7e8;
+}
+
+.amount-controls input {
+	width: 80px;
+}
+
+.amount-controls button {
+	padding: 8px 16px;
+}
+
+.odds-controls {
+	margin: 15px 0;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.odds-section {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.odds-section label {
+	font-weight: 600;
+	color: #e6e7e8;
+}
+
+#odds_inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	align-items: center;
+}
+
+.odds-distance-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+    max-width: 706px;
+}
+
+.odds-distance-item {
+    background-color: #2f4553;
+    color: #d5dceb;
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.odds-distance-item .label {
+    color: #e6e7e8;
+}
+
+.odds-distance-item .value {
+    color: #04d47c;
+}
+
+.odds-input-group {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.odds-input {
+	width: 80px;
+	height: 30px;
+	font-size: 16px;
+	background-color: #0a151c;
+	border: 0;
+	color: #e6e7e8;
+	text-align: center;
+	outline: 0;
+	border-radius: 3px;
+}
+
+.odds-color-indicator {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	border: 2px solid #2f4553;
+}
+
+.odds-color-indicator.white {
+	background-color: #95a5a6;
+}
+
+.odds-color-indicator.green {
+	background-color: #00ff41;
+}
+
+.odds-color-indicator.blue {
+	background-color: #00bfff;
+}
+
+.odds-color-indicator.purple {
+	background-color: #bf00ff;
+}
+
+.odds-color-indicator.orange {
+	background-color: #ff8c00;
+}
+
+.odds-color-indicator.red {
+	background-color: #ff0040;
+}
+
+.odds-color-indicator.yellow {
+	background-color: #ffff00;
+}
+
+.remove-odds {
+	background-color: #e74c3c;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	font-size: 16px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.remove-odds:hover {
+	background-color: #c0392b;
+}
+
+#add_odds {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: 600;
+}
+
+#add_odds:hover {
+	background-color: #2980b9;
+}
+
 label {
 	font-weight: 600;
 }
 
-.checkbox-container label,
+/* .checkbox-container label,
 .checkbox-container input {
 	vertical-align: middle;
-}
+} */
 
-.options {
+/* .options {
 	margin-top: 10px;
-}
-.options input {
+} */
+/* .options input {
 	width: 100px;
-}
+} */
 
-#update_button {
+/* #update_button {
 	width: 300px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
+} */
 
-#statistics {
+/* #statistics {
 	font-weight: 600;
 	margin-top: 5px;
-}
+} */
 
 span.good {
 	color: #04d47c;
@@ -165,9 +352,40 @@ span.bad {
 	align-items: center;
 }
 
-.crash.bom {
-	background-color: #00e701;
-	color: #013e01;
+/* Odds-based color system */
+.crash.below-threshold {
+	background-color: #95a5a6; /* Grey - below any threshold */
+	color: #2c3e50;
+}
+
+.crash.threshold-green {
+	background-color: #00ff41; /* Bright Green */
+	color: #2c3e50;
+}
+
+.crash.threshold-blue {
+	background-color: #00bfff; /* Bright Blue */
+	color: #2c3e50;
+}
+
+.crash.threshold-purple {
+	background-color: #bf00ff; /* Bright Purple */
+	color: #ffffff;
+}
+
+.crash.threshold-orange {
+	background-color: #ff8c00; /* Bright Orange */
+	color: #2c3e50;
+}
+
+.crash.threshold-red {
+	background-color: #ff0040; /* Bright Red */
+	color: #ffffff;
+}
+
+.crash.threshold-yellow {
+	background-color: #ffff00; /* Bright Yellow */
+	color: #2c3e50;
 }
 
 .crash.ui-selected,
