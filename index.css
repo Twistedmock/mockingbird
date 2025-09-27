@@ -185,6 +185,20 @@ input {
     max-width: 706px;
 }
 
+/* Betting calculator */
+.bet-calculator {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	gap: 8px;
+	align-items: center;
+	justify-items: center;
+	max-width: 706px;
+}
+
+.bet-calculator input {
+	width: 160px;
+}
+
 .odds-distance-item {
     background-color: #2f4553;
     color: #d5dceb;
@@ -194,6 +208,12 @@ input {
     justify-content: space-between;
     align-items: center;
     font-weight: 600;
+}
+
+/* Distinguish the first row (top thresholds) visually */
+.odds-distance-item.top-row {
+    background-color: #3a5f6f;
+    box-shadow: 0 0 0 1px #7ec8e3 inset;
 }
 
 .odds-distance-item .label {

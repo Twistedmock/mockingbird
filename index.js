@@ -1,6 +1,9 @@
 const resultsDiv = document.querySelector('#results');
 const loadingDiv = document.querySelector('#loading');
 const lastOddsDistancesDiv = document.querySelector('#last_odds_distances');
+const calcTotalDepositInput = document.querySelector('#calc_total_deposit');
+const calcShotsInput = document.querySelector('#calc_shots');
+const calcBetPointOutput = document.querySelector('#calc_bet_point_output');
 // const statisticsDiv = document.querySelector('#statistics');
 const seedInput = document.querySelector('#seed_input');
 const hashStatusDiv = document.querySelector('#hash_status');
@@ -265,6 +268,7 @@ function initializeOddsInputs() {
 window.addEventListener('load', () => {
 	startHashMonitoring();
 	initializeOddsInputs();
+    initializeBetCalculator();
 });
 
 seedInput.addEventListener('keyup', (ev) => {
@@ -313,6 +317,7 @@ function OnInputChange(byButton = false) {
 		loadingDiv.innerHTML = '';
 		resultsDiv.innerHTML = '';
         if (lastOddsDistancesDiv) lastOddsDistancesDiv.innerHTML = '';
+        updateBetCalculator();
 		return;
 	}
 
@@ -321,6 +326,7 @@ function OnInputChange(byButton = false) {
 
     GetChain(seed, amount);
 	UpdateSelectionWindow();
+    updateBetCalculator();
 }
 
 function GetChain(seed, amount = 1000) {
@@ -372,8 +378,37 @@ function GetChain(seed, amount = 1000) {
     updateLastOddsDistances();
 }
 
+function initializeBetCalculator() {
+    if (calcTotalDepositInput) calcTotalDepositInput.addEventListener('input', updateBetCalculator);
+    if (calcShotsInput) calcShotsInput.addEventListener('input', updateBetCalculator);
+}
+
+function computeBetPoint(totalDeposit, numberOfShots) {
+    if (!isFinite(totalDeposit) || totalDeposit <= 0) return 0;
+    if (!Number.isFinite(numberOfShots) || numberOfShots <= 0) return 0;
+    const half = totalDeposit / 2;
+    const perShot = half / numberOfShots;
+    return perShot;
+}
+
+function formatBetPoint(value) {
+    if (!isFinite(value) || value <= 0) return '0';
+    const withPrecision = value.toFixed(8);
+    return withPrecision.replace(/\.?(0)+$/, '');
+}
+
+function updateBetCalculator() {
+    if (!calcBetPointOutput) return;
+    const total = parseFloat(calcTotalDepositInput && calcTotalDepositInput.value ? calcTotalDepositInput.value : '');
+    const shots = parseInt(calcShotsInput && calcShotsInput.value ? calcShotsInput.value : '');
+    const betPoint = computeBetPoint(total, shots);
+    calcBetPointOutput.textContent = formatBetPoint(betPoint);
+}
+
 // Fixed ladder values to compare distances against
-const DISTANCE_LADDER = [1, 1.1, 1.4, 2, 5, 10, 20, 30, 50, 100, 200, 500, 1000];
+// Top thresholds are measured specially (see updateLastOddsDistances)
+const TOP_DISTANCE_TARGETS = [1, 1.1, 1.4, 2];
+const OTHER_DISTANCE_TARGETS = [5, 10, 20, 30, 50, 100, 200, 500]; // 1000 removed as requested
 
 function updateLastOddsDistances() {
 	if (!lastOddsDistancesDiv) return;
@@ -382,19 +417,60 @@ function updateLastOddsDistances() {
 		return;
 	}
 
-	const items = DISTANCE_LADDER.map(target => {
+	// Helper to compute distance from start index to first occurrence >= target
+	function distanceSince(target, startIndexInclusive) {
+		const start = Math.min(lastChain.length, Math.max(0, startIndexInclusive));
 		let foundIndex = -1;
-		for (let i = 0; i < lastChain.length; i++) {
+		for (let i = start; i < lastChain.length; i++) {
 			if (lastChain[i] >= target) {
 				foundIndex = i;
 				break;
 			}
 		}
-		const since = foundIndex === -1 ? lastChain.length : foundIndex;
+		if (foundIndex === -1) {
+			return lastChain.length - start;
+		}
+		return foundIndex - start;
+	}
+
+	// Helper: distance when searching backward from a starting boundary
+	function distanceReverseSince(target, startIndexExclusive) {
+		const start = Math.min(lastChain.length, Math.max(0, startIndexExclusive));
+		let foundIndex = -1;
+		for (let i = start - 1; i >= 0; i--) {
+			if (lastChain[i] >= target) {
+				foundIndex = i;
+				break;
+			}
+		}
+		if (foundIndex === -1) {
+			return start;
+		}
+		return start - foundIndex;
+	}
+
+	// Find the first time we hit <= 1.10 (1.1 or below odds)
+	let firstLeqOnePointOneIndex = -1;
+	for (let i = 0; i < lastChain.length; i++) {
+		if (lastChain[i] <= 1.10) {
+			firstLeqOnePointOneIndex = i;
+			break;
+		}
+	}
+	if (firstLeqOnePointOneIndex === -1) firstLeqOnePointOneIndex = lastChain.length; // safeguard
+
+	// Build items: top thresholds measured in REVERSE from the first <= 1.10 occurrence
+	const topItems = TOP_DISTANCE_TARGETS.map(target => {
+		const since = distanceReverseSince(target, firstLeqOnePointOneIndex);
+		return `<div class="odds-distance-item top-row"><span class="label">${target}</span><span class="value">${since}</span></div>`;
+	}).join('');
+
+	const otherItems = OTHER_DISTANCE_TARGETS.map(target => {
+		const since = distanceSince(target, 0);
 		return `<div class="odds-distance-item"><span class="label">${target}</span><span class="value">${since}</span></div>`;
 	}).join('');
 
-	lastOddsDistancesDiv.innerHTML = items;
+	lastOddsDistancesDiv.innerHTML = topItems + otherItems;
 }
 
 /* function UpdateStatistics(totalCount = 0, goodCount = 0) {

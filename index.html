@@ -32,6 +32,14 @@
 					<label>Last Odds Distance:</label>
 					<div id="last_odds_distances" class="odds-distance-list"></div>
 				</div>
+				<div class="odds-section">
+					<label>Betting Calculator</label>
+					<div id="bet_calculator" class="bet-calculator">
+						<input id="calc_total_deposit" type="number" min="0" step="any" placeholder="Total deposit" />
+						<input id="calc_shots" type="number" min="1" step="1" placeholder="Number of shots" />
+						<div class="odds-distance-item"><span class="label">Per-shot amount</span><span id="calc_bet_point_output" class="value">0</span></div>
+					</div>
+				</div>
 			</div>
 			<div id="loading"></div>
 			<div id="results"></div>
