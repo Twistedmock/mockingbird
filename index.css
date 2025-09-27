@@ -392,3 +392,46 @@ span.bad {
 .crash.ui-selecting {
 	outline: solid 2px #0079ff;
 }
+
+/* Live crash iframe embed */
+#live_crash_embed {
+	position: fixed;
+	bottom: 12px;
+	right: 12px;
+	z-index: 9999;
+	width: 324px;
+	height: 198px;
+	background: #0a151c;
+	border: 1px solid #2f4553;
+	border-radius: 8px;
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+	overflow: hidden;
+}
+
+#live_crash_embed iframe {
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+#live_crash_embed .embed-fallback-link {
+	position: absolute;
+	left: 8px;
+	bottom: 8px;
+	background: rgba(26, 44, 56, 0.9);
+	color: #b8bfc3;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	text-decoration: none;
+	border: 1px solid #2f4553;
+}
+
+@media (max-width: 600px) {
+	#live_crash_embed {
+		width: 81vw;
+		height: 36vh;
+		bottom: 10px;
+		right: 10px;
+	}
+}

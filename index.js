@@ -360,7 +360,7 @@ function GetChain(seed, amount = 1000) {
 		let multiplier = value;
 
 		const div = document.createElement('div');
-		div.textContent = multiplier.toFixed(2) + 'X';
+		div.textContent = multiplier.toFixed(2);
 		const colorClass = getColorClass(multiplier);
 		div.className = `crash ${colorClass}`;
 		resultsDiv.appendChild(div);
@@ -391,7 +391,7 @@ function updateLastOddsDistances() {
 			}
 		}
 		const since = foundIndex === -1 ? lastChain.length : foundIndex;
-		return `<div class="odds-distance-item"><span class="label">${target}x</span><span class="value">${since}</span></div>`;
+		return `<div class="odds-distance-item"><span class="label">${target}</span><span class="value">${since}</span></div>`;
 	}).join('');
 
 	lastOddsDistancesDiv.innerHTML = items;
