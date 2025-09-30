@@ -159,6 +159,49 @@ function updateResults() {
 	}
 }
 
+// Function to set amount from preset buttons
+function setAmount(value) {
+	amountInput.value = value;
+	updateResults();
+}
+
+// Function to set odds threshold from preset buttons
+function setOddsThreshold(value) {
+	const firstOddsInput = document.querySelector('.odds-input');
+	if (firstOddsInput) {
+		firstOddsInput.value = value;
+		
+		// Change the color attribute based on the value
+		let color = 'green'; // default
+		if (value === 1.05) {
+			color = 'peacock';
+		} else if (value === 1.10) {
+			color = 'navy';
+		} else if (value === 1.4) {
+			color = 'orange';
+		} else if (value === 2) {
+			color = 'green';
+		} else if (value === 5) {
+			color = 'purple';
+		} else if (value === 20) {
+			color = 'red';
+		}
+		
+		firstOddsInput.setAttribute('data-color', color);
+		
+		// Update the color indicator
+		const colorIndicator = firstOddsInput.parentElement.querySelector('.odds-color-indicator');
+		if (colorIndicator) {
+			// Remove all color classes
+			colorIndicator.className = 'odds-color-indicator';
+			// Add the new color class
+			colorIndicator.classList.add(color);
+		}
+		
+		updateResults();
+	}
+}
+
 // Available colors for odds thresholds
 const availableColors = ['green', 'blue', 'purple', 'orange', 'red', 'yellow'];
 let usedColors = ['green']; // Track which colors are in use

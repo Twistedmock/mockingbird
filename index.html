@@ -8,14 +8,34 @@
 		<link rel="stylesheet" href="index.css" />
 	</head>
 	<body>
+		<!-- Odds Preset Buttons - Left Corner -->
+		<div class="odds-preset-buttons left-corner">
+			<button class="odds-btn-green" onclick="setOddsThreshold(2)">2</button>
+			<button class="odds-btn-red" onclick="setOddsThreshold(20)">20</button>
+			<button class="odds-btn-purple" onclick="setOddsThreshold(5)">5</button>
+		</div>
+		
+		<!-- Odds Preset Buttons - Right Corner -->
+		<div class="odds-preset-buttons right-corner">
+			<button class="odds-btn-cyan" onclick="setOddsThreshold(1.05)">1.05</button>
+			<button class="odds-btn-blue" onclick="setOddsThreshold(1.10)">1.10</button>
+			<button class="odds-btn-orange" onclick="setOddsThreshold(1.4)">1.4</button>
+		</div>
+
 		<div class="middle">
 			<div id="hash_status" class="hash-status">Connecting to live feed...</div>
 			<input id="seed_input" type="text" placeholder="Enter the hash" />
-			<div class="amount-controls">
-				<label for="amount_input">Number of previous hashes:</label>
-				<input id="amount_input" type="number" min="1" max="10000" value="100" />
-				<button onclick="updateResults()">Update</button>
+		<div class="amount-controls">
+			<label for="amount_input">Number of previous hashes:</label>
+			<input id="amount_input" type="number" min="1" max="10000" value="1000" />
+			<div class="amount-preset-buttons">
+				<button class="amount-btn" onclick="setAmount(10)">10</button>
+				<button class="amount-btn" onclick="setAmount(100)">100</button>
+				<button class="amount-btn" onclick="setAmount(1000)">1000</button>
+				<button class="amount-btn" onclick="setAmount(10000)">10k</button>
 			</div>
+			<button onclick="updateResults()">Update</button>
+		</div>
 			<div class="odds-controls">
 				<div class="odds-section">
 					<label>Odds Thresholds:</label>

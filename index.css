@@ -29,6 +29,125 @@ button:active {
 	background-color: #18aa18;
 }
 
+/* Odds Preset Buttons */
+.odds-preset-buttons {
+	position: fixed;
+	top: 10px;
+	display: flex;
+	gap: 8px;
+	z-index: 1000;
+}
+
+.odds-preset-buttons.left-corner {
+	left: 10px;
+}
+
+.odds-preset-buttons.right-corner {
+	right: 10px;
+}
+
+.odds-preset-buttons button {
+	background-color: #3498db;
+	color: white;
+	padding: 8px 14px;
+	font-size: 16px;
+	min-width: 50px;
+	border-radius: 5px;
+}
+
+.odds-preset-buttons button:hover {
+	background-color: #2980b9;
+}
+
+.odds-preset-buttons button:active {
+	background-color: #21618c;
+}
+
+/* Individual button colors */
+.odds-btn-cyan {
+	background-color: #2d5a5f !important; /* Dark Teal */
+	color: #b8e6e8 !important;
+	font-weight: 700 !important;
+	box-shadow: 0 0 6px rgba(45, 90, 95, 0.3);
+}
+
+.odds-btn-cyan:hover {
+	background-color: #3a7075 !important;
+	box-shadow: 0 0 10px rgba(45, 90, 95, 0.5);
+}
+
+.odds-btn-cyan:active {
+	background-color: #24484c !important;
+}
+
+.odds-btn-blue {
+	background-color: #34495e !important; /* Dark Slate Blue */
+	color: #a8b9d1 !important;
+	font-weight: 700 !important;
+	box-shadow: 0 0 6px rgba(52, 73, 94, 0.4);
+}
+
+.odds-btn-blue:hover {
+	background-color: #4a5f7a !important;
+	box-shadow: 0 0 10px rgba(52, 73, 94, 0.6);
+}
+
+.odds-btn-blue:active {
+	background-color: #2c3e50 !important;
+}
+
+.odds-btn-orange {
+	background-color: #ff8c00 !important;
+	color: #2c3e50 !important;
+}
+
+.odds-btn-orange:hover {
+	background-color: #e67e00 !important;
+}
+
+.odds-btn-orange:active {
+	background-color: #cc7000 !important;
+}
+
+.odds-btn-green {
+	background-color: #00ff41 !important;
+	color: #2c3e50 !important;
+}
+
+.odds-btn-green:hover {
+	background-color: #00e63a !important;
+}
+
+.odds-btn-green:active {
+	background-color: #00cc33 !important;
+}
+
+.odds-btn-red {
+	background-color: #ff0040 !important;
+	color: white !important;
+}
+
+.odds-btn-red:hover {
+	background-color: #e6003a !important;
+}
+
+.odds-btn-red:active {
+	background-color: #cc0033 !important;
+}
+
+.odds-btn-purple {
+	background-color: #bf00ff !important;
+	color: white !important;
+}
+
+.odds-btn-purple:hover {
+	background-color: #a800e6 !important;
+}
+
+.odds-btn-purple:active {
+	background-color: #9100cc !important;
+}
+
 /* .up-right {
 	display: flex;
 	flex-direction: column;
@@ -147,6 +266,29 @@ input {
 
 .amount-controls button {
 	padding: 8px 16px;
+}
+
+.amount-preset-buttons {
+	display: flex;
+	gap: 4px;
+}
+
+.amount-btn {
+	background-color: #3498db !important;
+	color: white !important;
+	padding: 4px 10px !important;
+	font-size: 14px !important;
+	min-width: 40px;
+	border-radius: 4px;
+	font-weight: 600;
+}
+
+.amount-btn:hover {
+	background-color: #2980b9 !important;
+}
+
+.amount-btn:active {
+	background-color: #21618c !important;
 }
 
 .odds-controls {
@@ -275,6 +417,22 @@ input {
 
 .odds-color-indicator.yellow {
 	background-color: #ffff00;
+}
+
+.odds-color-indicator.peacock {
+	background-color: #2d5a5f;
+}
+
+.odds-color-indicator.navy {
+	background-color: #34495e;
+}
+
+.odds-color-indicator.chocolate {
+	background-color: #d2691e;
+}
+
+.odds-color-indicator.black {
+	background-color: #2c2c2c;
 }
 
 .remove-odds {
@@ -406,6 +564,26 @@ span.bad {
 .crash.threshold-yellow {
 	background-color: #ffff00; /* Bright Yellow */
 	color: #2c3e50;
+}
+
+.crash.threshold-peacock {
+	background-color: #2d5a5f; /* Dark Teal */
+	color: #b8e6e8;
+}
+
+.crash.threshold-navy {
+	background-color: #34495e; /* Dark Slate Blue */
+	color: #a8b9d1;
+}
+
+.crash.threshold-chocolate {
+	background-color: #d2691e; /* Chocolate */
+	color: #ffffff;
+}
+
+.crash.threshold-black {
+	background-color: #2c2c2c; /* Black */
+	color: #ffffff;
 }
 
 .crash.ui-selected,
