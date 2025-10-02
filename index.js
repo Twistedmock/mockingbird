@@ -4,6 +4,9 @@ const lastOddsDistancesDiv = document.querySelector('#last_odds_distances');
 const calcTotalDepositInput = document.querySelector('#calc_total_deposit');
 const calcShotsInput = document.querySelector('#calc_shots');
 const calcBetPointOutput = document.querySelector('#calc_bet_point_output');
+const martTotalDepositInput = document.querySelector('#mart_total_deposit');
+const martShotsInput = document.querySelector('#mart_shots');
+const martBaseBetOutput = document.querySelector('#mart_base_bet_output');
 // const statisticsDiv = document.querySelector('#statistics');
 const seedInput = document.querySelector('#seed_input');
 const hashStatusDiv = document.querySelector('#hash_status');
@@ -165,6 +168,9 @@ function setAmount(value) {
 	updateResults();
 }
 
+// Track if we're in a special threshold mode (right corner buttons)
+let specialStreakMode = false;
+
 // Function to set odds threshold from preset buttons
 function setOddsThreshold(value) {
 	const firstOddsInput = document.querySelector('.odds-input');
@@ -175,16 +181,22 @@ function setOddsThreshold(value) {
 		let color = 'green'; // default
 		if (value === 1.05) {
 			color = 'peacock';
+			specialStreakMode = true;
 		} else if (value === 1.10) {
 			color = 'navy';
+			specialStreakMode = true;
 		} else if (value === 1.4) {
 			color = 'orange';
+			specialStreakMode = true;
 		} else if (value === 2) {
 			color = 'green';
+			specialStreakMode = false;
 		} else if (value === 5) {
 			color = 'purple';
+			specialStreakMode = false;
 		} else if (value === 20) {
 			color = 'red';
+			specialStreakMode = false;
 		}
 		
 		firstOddsInput.setAttribute('data-color', color);
@@ -312,6 +324,7 @@ window.addEventListener('load', () => {
 	startHashMonitoring();
 	initializeOddsInputs();
     initializeBetCalculator();
+    initializeMartingaleCalculator();
 });
 
 seedInput.addEventListener('keyup', (ev) => {
@@ -405,13 +418,30 @@ function GetChain(seed, amount = 1000) {
 
     chain = chain.map(seedToPoint);
 
-    for (let value of chain) {
-		let multiplier = value;
+    // Detect streaks when in special mode
+    let streakMarkers = null;
+    if (specialStreakMode) {
+        streakMarkers = detectStreaks(chain);
+    }
+
+    for (let i = 0; i < chain.length; i++) {
+		let multiplier = chain[i];
 
 		const div = document.createElement('div');
 		div.textContent = multiplier.toFixed(2);
 		const colorClass = getColorClass(multiplier);
 		div.className = `crash ${colorClass}`;
+		
+		// Apply streak highlighting if in special mode
+		if (specialStreakMode && streakMarkers) {
+		    if (streakMarkers.below150[i]) {
+		        div.classList.add('streak-below-150');
+		    }
+		    if (streakMarkers.above10[i]) {
+		        div.classList.add('streak-above-10');
+		    }
+		}
+		
 		resultsDiv.appendChild(div);
 	}
 
@@ -419,6 +449,71 @@ function GetChain(seed, amount = 1000) {
 	lastChain = chain.slice();
 	lastOddsValue = chain.length > 0 ? chain[0] : null;
     updateLastOddsDistances();
+}
+
+// Function to detect streaks in the chain
+function detectStreaks(chain) {
+    const below150 = new Array(chain.length).fill(false);
+    const above10 = new Array(chain.length).fill(false);
+    
+    // Detect streaks below 1.50 (2+ consecutive)
+    let streakStart = -1;
+    for (let i = 0; i < chain.length; i++) {
+        if (chain[i] < 1.50) {
+            if (streakStart === -1) {
+                streakStart = i;
+            }
+        } else {
+            // End of streak
+            if (streakStart !== -1) {
+                const streakLength = i - streakStart;
+                if (streakLength >= 2) {
+                    // Mark all elements in this streak
+                    for (let j = streakStart; j < i; j++) {
+                        below150[j] = true;
+                    }
+                }
+                streakStart = -1;
+            }
+        }
+    }
+    // Handle streak that goes to the end
+    if (streakStart !== -1) {
+        const streakLength = chain.length - streakStart;
+        if (streakLength >= 2) {
+            for (let j = streakStart; j < chain.length; j++) {
+                below150[j] = true;
+            }
+        }
+    }
+    
+    // Detect streaks of 10+ consecutive
+    streakStart = -1;
+    for (let i = 0; i < chain.length; i++) {
+        if (chain[i] >= 10.0) {
+            if (streakStart === -1) {
+                streakStart = i;
+            }
+        } else {
+            // End of streak
+            if (streakStart !== -1) {
+                const streakLength = i - streakStart;
+                // Mark all elements in this streak (any length for 10+)
+                for (let j = streakStart; j < i; j++) {
+                    above10[j] = true;
+                }
+                streakStart = -1;
+            }
+        }
+    }
+    // Handle streak that goes to the end
+    if (streakStart !== -1) {
+        for (let j = streakStart; j < chain.length; j++) {
+            above10[j] = true;
+        }
+    }
+    
+    return { below150, above10 };
 }
 
 function initializeBetCalculator() {
@@ -446,6 +541,31 @@ function updateBetCalculator() {
     const shots = parseInt(calcShotsInput && calcShotsInput.value ? calcShotsInput.value : '');
     const betPoint = computeBetPoint(total, shots);
     calcBetPointOutput.textContent = formatBetPoint(betPoint);
+}
+
+function initializeMartingaleCalculator() {
+    if (martTotalDepositInput) martTotalDepositInput.addEventListener('input', updateMartingaleCalculator);
+    if (martShotsInput) martShotsInput.addEventListener('input', updateMartingaleCalculator);
+}
+
+function computeMartingaleBaseBet(totalDeposit, numberOfShots) {
+    if (!isFinite(totalDeposit) || totalDeposit <= 0) return 0;
+    if (!Number.isFinite(numberOfShots) || numberOfShots <= 0) return 0;
+    // Use half of total deposit
+    const halfDeposit = totalDeposit / 2;
+    // Martingale sum formula: baseBet * (2^n - 1) = halfDeposit
+    // So: baseBet = halfDeposit / (2^n - 1)
+    const sumMultiplier = Math.pow(2, numberOfShots) - 1;
+    const baseBet = halfDeposit / sumMultiplier;
+    return baseBet;
+}
+
+function updateMartingaleCalculator() {
+    if (!martBaseBetOutput) return;
+    const total = parseFloat(martTotalDepositInput && martTotalDepositInput.value ? martTotalDepositInput.value : '');
+    const shots = parseInt(martShotsInput && martShotsInput.value ? martShotsInput.value : '');
+    const baseBet = computeMartingaleBaseBet(total, shots);
+    martBaseBetOutput.textContent = formatBetPoint(baseBet);
 }
 
 // Fixed ladder values to compare distances against
